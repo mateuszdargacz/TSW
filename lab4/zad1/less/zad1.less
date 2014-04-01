@@ -1,0 +1,33 @@
+@background: #727272;
+body {
+    height: 100%;
+  #outer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+
+    .box {
+      border: 1px solid black;
+      width: 200px;
+      height: 200px;
+      font-size: 54px;
+      text-align: center;
+      vertical-align: middle;
+    }
+
+    :nth-child(1) {
+      background-color: @background;
+      align-self: flex-start;
+    }
+    :nth-child(2) {
+      background-color: lighten(@background, 20%);
+    }
+    :nth-child(3) {
+      background-color: lighten(@background, 30%);
+      align-self: flex-end;
+
+    }
+  }
+}

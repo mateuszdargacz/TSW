@@ -1,0 +1,20 @@
+body .A {
+  border: solid 2px #c50000;
+  text-align: center;
+  background-color: #f8f800;
+  width: 20%;
+  height: 20%;
+  margin: 10% 30% 30% 30%;
+  z-index: 0;
+  position: absolute;
+}
+body .B {
+  border: solid 2px #1524c5;
+  text-align: center;
+  background-color: #ffffff;
+  width: 20%;
+  height: 20%;
+  margin: 15% 30% 30% 45%;
+  z-index: 1;
+  position: absolute;
+}

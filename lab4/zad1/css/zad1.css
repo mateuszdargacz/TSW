@@ -1,0 +1,28 @@
+body {
+  height: 100%;
+}
+body #outer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+body #outer .box {
+  border: 1px solid black;
+  width: 200px;
+  height: 200px;
+  font-size: 54px;
+  text-align: center;
+  vertical-align: middle;
+}
+body #outer :nth-child(1) {
+  background-color: #727272;
+  align-self: flex-start;
+}
+body #outer :nth-child(2) {
+  background-color: #a5a5a5;
+}
+body #outer :nth-child(3) {
+  background-color: #bfbfbf;
+  align-self: flex-end;
+}
