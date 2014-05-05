@@ -4,7 +4,7 @@ div.hd {
   margin-left: 100px;
   background-color: blue;
   font-family: sans-serif;
-  font-weight: bold;
+  font-weight: bold;s
   color: white;
   border: 1px solid black;
   border-top: 2px solid purple;
@@ -16,4 +16,11 @@ div.bd {
   margin-left: 100px;
   border: 1px solid black;
   border-top: 0;
+}
+
+.hide {
+    display: none;
+}
+.hide {
+    display: block;
 }

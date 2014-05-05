@@ -6,6 +6,7 @@ exports.index = function (req, res) {
 };
 
 exports.play = function (req, res) {
+
     var newGame = function () {
         var i, data = [],
             puzzle = req.session.puzzle;

@@ -1,15 +1,42 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <title><%= title %></title>
-    <link rel='stylesheet' href='/css/style.css' />
+    <link rel='stylesheet' href='/css/style.css'/>
+    <link rel='stylesheet' href='/css/bootstrap.min.css'/>
     <script src='jquery.min.js'></script>
+    <script src='/js/bootstrap.min.js'></script>
     <script src='/js/skrypt.js'></script>
-  </head>
-  <body>
-    <p>Welcome to <%= title %></p>
-    <p>
-    Interfejs użytkownika
-    </p>
-  </body>
+</head>
+<body>
+<div class="jumbotron">
+    <h1>Witaj w Mastermind</h1>
+
+    <div class="row">
+        <div class="col-md-6">
+            <form id="game_form" action="/play/" method="GET">
+            <div class="form-group">
+                <div>
+                    <input class="form-control" id="size" name="size" placeholder="Ilość losowanych kolorów"
+                           type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <div>
+                    <input class="form-control" id="dim" name="dim" placeholder="Ilość dostępnych kolorów" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <div>
+                    <input class="form-control" id="max" name="max" placeholder="Max liczba prób (opcjonalne)"
+                           type="text">
+                </div>
+            </div>
+            <input class="btn btn-primary btn-lg pull-right" type="submit" value="Losuj"/>
+            </form>
+        </div>
+    </div>
+
+</div>
+</body>
 </html>

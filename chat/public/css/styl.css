@@ -1,10 +1,6 @@
 #chatLog {
-	border-top: 1px solid #ddd;
 	border-bottom: 1px solid #ddd;
-	margin-top: 6px;
-	padding-top: 6px;
 	margin-bottom: 16px;
-	height: 300px;
 	overflow: auto;
 }
 .bulb {
@@ -13,5 +9,37 @@
 }
 .bulb img {
 	height: 18px;
-	vertical-align: bottom;
+	vertical-align: top;
+}
+li{
+    list-style: none;
+}
+.room-active{
+    color: #008000;
+    font-size: 16px;
+
+}
+.chat-msg{
+    height: 400px;
+    overflow-y: scroll;
+}
+#message-form{
+    position: absolute;
+    width: 100%;
+    padding: 0;
+    right: 100px;
+    bottom: 50px;
+    overflow-x: hidden;
+}
+#message-form>.pull-right{
+    width: 80%;
+}
+
+.my-hr{
+     display: block;
+    height: 1px;
+    border: 0;
+    border-top: 1px solid #C0EBE5;
+    margin: 1em 0;
+    padding: 0;
 }

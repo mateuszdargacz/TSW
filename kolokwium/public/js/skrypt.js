@@ -21,13 +21,73 @@ $(function () {
         { woj: 'podkarpackie', left: 458, top: 459, width: 109, height: 113 }
     ];
     /*
-        Dostępne usługi REST-owe serwera:
+     Dostępne usługi REST-owe serwera:
 
-        – /<województwo>
-          zwraca obiekt JSON zawierający wszystkie gminy danego <województwa>
+     – /<województwo>
+     zwraca obiekt JSON zawierający wszystkie gminy danego <województwa>
 
-        – /<województwo>/<wyrażenie_regularne>
-          zwraca obiekt JSON zawierający wszystkie gminy danego <województwa>,
-          których nazwy pasują do napisu definiującego <wyrażenie_regularne>.
-    */
+     – /<województwo>/<wyrażenie_regularne>
+     zwraca obiekt JSON zawierający wszystkie gminy danego <województwa>,
+     których nazwy pasują do napisu definiującego <wyrażenie_regularne>.
+     */
+
+    var mapClick = function (position) {
+        var a = undefined;
+        $.each(wojewodztwa, function (index) {
+            if (position.top > this.top &&
+                position.top < this.top + this.height &&
+                position.left > this.left &&
+                position.left < this.left + this.width) {
+                a = this.woj;
+            }
+        });
+        return a;
+
+
+    };
+    $("body").on("click", "#mapa", function (e) {
+        var position = {
+            top: e.pageY - $(this).position().top,
+            left: e.pageX - $(this).position().left
+
+        };
+
+        var pos = mapClick(position);
+        make_request(mapClick(position));
+    });
+
+//GEt Ajax data
+    var make_request = function (woj) {
+        var request;
+        if (request) {
+            request.abort();
+        }
+        var url = '/' + woj + '/';
+        request = $.ajax({
+            type: "GET",
+            url: url
+
+        });
+        request.done(function (response, textStatus, jqXHR) {
+            $("#title").remove();
+            var list = $("#lista>ul");
+            list.parent().before("<p id='title'>"+woj+"</p>");
+            $.each(response, function () {
+                list.append($("<li><a target='_blank' href='https://www.google.pl/#q=" + this.gmina +"'>" + this.gmina + "</a></li>"));
+            });
+        });
+        request.fail(function (jqXHR, textStatus, errorThrown) {
+            console.error(
+                "The following error occured: " +
+                    textStatus, errorThrown
+            );
+        });
+    };
+    $("body").on("click","#czysc",function () {
+        $("#lista>ul").empty();
+        $("#title").remove();
+    });
+
 });
+
+

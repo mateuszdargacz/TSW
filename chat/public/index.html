@@ -2,29 +2,157 @@
 <html lang="pl">
 
 <head>
-  <meta charset="UTF-8">
-  <title>CzatApka</title>
-  <script src="/socket.io/socket.io.js"></script>
-  <script src="angular/angular.min.js"></script>
-  <script src="js/main.js"></script>
-  <link rel="stylesheet" href="css/styl.css">
-</head>
+    <meta charset="UTF-8">
+    <title>CzatApka</title>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="angular/angular.min.js"></script>
+    <script src="angular-cookies/angular-cookies.min.js"></script>
+    <script src="jquery/dist/jquery.min.js"></script>
+    <script src="bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="underscore/underscore.js"></script>
+    <script src="js/jquery.cookie.js"></script>
+    <script src="js/main.js"></script>
+    <link rel="stylesheet" href="css/styl.css">
+    <link rel="stylesheet" href="bootstrap/dist/css/bootstrap.min.css">
 
+</head>
 <body data-ng-app="czatApka">
-  <div data-ng-controller="chatCtrlr">
-    <div data-ng-hide="connected" class="bulb">
-      <img src="img/bullet_red.png"> trwa łączenie…
+<div data-ng-controller="chatCtrlr">
+    <!--TODO fsafsafas-->
+    <!--<h2 ng-init="activeRoom = {{getActiveRoom()}}">{{activeRoom}}</h2>-->
+    <div class="modal fade" id="myModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Enter Username</h4>
+                </div>
+                <div class="modal-body">
+                    <form action="." name="username">
+                        <div class="col-md-6 col-md-offset-3">
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="userName" ng-model="User.name"
+                                       ng-minlength="3" ng-required="true"/>
+                            </div>
+                        </div>
+                    </form>
+                    <br>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" ng-show="username.userName.$valid"
+                            ng-click="changeOrCreateUser(User.name)" data-dismiss="modal">Zaczynamy!
+                    </button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
     </div>
-    <div data-ng-show="connected" class="bulb">
-      <img src="img/bullet_green.png"> połączono
+    <!-- /.modal -->
+    <div class="row">
+        <div id="chatLog" class="col-md-8">
+            <nav class="navbar navbar-default" role="navigation">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <a class="navbar-brand" href="#">ChatApka</a>
+                    </div>
+                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                        <ul class="nav navbar-nav">
+                            <li class="active"><a href="#">
+                            <span data-ng-hide="connected" class="bulb">
+                                <img src="img/bullet_red.png"> trwa łączenie…
+                            </span>
+                            <span data-ng-show="connected" class="bulb">
+                                <img src="img/bullet_green.png"> połączono
+                            </span>
+
+                            </a></li>
+                            <li><a href="#" class="" data-toggle="modal" data-target="#myModal">
+                                Witaj {{User.name}}
+                            </a></li>
+                            <li class="active"><a href="#">Aktywne Pokoje</a></li>
+                            <li><a href="#">|</a></li>
+
+                            <li ng-repeat="room in openedRooms" class="{{isActiveRoom(room)}}"><a
+                                    ng-click="setActiveRoom(room)" href="#">{{room.name}}
+                                <span ng-click="leaveRoom(room)" class="glyphicon glyphicon-remove"></span></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+            <div class="jumbotron ">
+                <div class="chat-msg">
+                <ul class="list-group">
+                <li  class="list-group-item list-group-item-success" data-ng-repeat="msg in msgs | activeRoomMsg: getActiveRoom()">
+                    {{msg.user.name}} <div class="pull-right">{{msg.date}}</div><br/>{{msg.text}}
+                </li>
+                </ul>
+                </div>
+                <div id="message-form">
+                    <div class="pull-left">
+                    </div>
+                        <div class="pull-right">
+                            <message send="sendMSG(msg)"></message>
+                        </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div id="chatRooms">
+                <div class="jumbotron">
+                    <div id="searchRoom">
+                        <nav class="navbar navbar-default" role="navigation">
+                            <div class="container-fluid">
+                                <div class="navbar-header">
+                                    <a class="navbar-brand" href="#">Pokoje</a>
+                                </div>
+                                <form class="navbar-form navbar-left" role="search">
+                                    <div class="form-group">
+                                        <input type="text" ng-model="searchRoom" class="form-control"
+                                               placeholder="Szukaj pokoju">
+                                    </div>
+                                </form>
+                            </div>
+                        </nav>
+                    </div>
+                    <div id="roomList">
+                        <ul class="list-group">
+                            <li class="list-group-item"
+                                ng-repeat="room in openedRooms | orderBy: 'name' |filter: searchRoom | unique: 'name'">
+                                <div class="single-room room-active">
+                            <span class="glyphicon glyphicon-arrow-right">
+                                {{room.name}}
+                            </span>
+                                </div>
+                            </li>
+                            <li class="list-group-item"
+                                ng-repeat="room in rooms | notOpenedRooms: openedRooms | orderBy: 'name' |filter: searchRoom | unique: 'name'">
+                                <div class="single-room">
+                                    <a href="#" ng-click="enterRoom(room)">
+                                <span class="glyphicon glyphicon-arrow-right">
+                                    {{room.name}}
+                                </span>
+                                    </a>
+                                </div>
+                            </li>
+                            <li class="list-group-item list-group-item-info" id="roomAdd">
+                                <input type="text" ng-model="newRoomName"/>
+                                <a href="#" ng-click="appendRoom(newRoomName)">
+                                    <span class="glyphicon glyphicon-plus-sign"> Dodaj pokój</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <div id="chatLog">
-      <div data-ng-repeat="msg in msgs track by $index">{{msg}}</div>
-    </div>
-    <form action="" data-ng-submit="sendMsg()">
-      <input type="text" data-ng-model="msg.text" maxlength="20">
-    </form>
-  </div>
+
+
+</div>
+<script>
+
+</script>
 </body>
 
 </html>
